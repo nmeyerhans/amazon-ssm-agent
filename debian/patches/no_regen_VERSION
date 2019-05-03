@@ -1,0 +1,21 @@
+Index: amazon-ssm-agent/makefile
+===================================================================
+--- amazon-ssm-agent.orig/makefile
++++ amazon-ssm-agent/makefile
+@@ -119,9 +119,6 @@ pre-build:
+ 	$(COPY) $(BGO_SPACE)/seelog_unix.xml $(BGO_SPACE)/bin/
+ 	$(COPY) $(BGO_SPACE)/seelog_windows.xml.template $(BGO_SPACE)/bin/
+ 	$(COPY) $(BGO_SPACE)/agent/integration-cli/integration-cli.json $(BGO_SPACE)/bin/
+-
+-	@echo "Regenerate version file during pre-release"
+-	go run $(BGO_SPACE)/agent/version/versiongenerator/version-gen.go
+ 	$(COPY) $(BGO_SPACE)/VERSION $(BGO_SPACE)/bin/
+ 
+ ifeq ($(BRAZIL_BUILD), true)
+@@ -467,4 +464,4 @@ else
+ 	@echo "Start generating mocks in directory" $(MOCKERYDIR)
+ endif
+ 	mockery -name="[A-Z]*" -dir=$(MOCKERYDIR) -output=mocks
+-	mv mocks $(MOCKERYDIR)/mocks
+\ No newline at end of file
++	mv mocks $(MOCKERYDIR)/mocks

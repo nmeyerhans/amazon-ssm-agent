@@ -1,0 +1,47 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+
+%:
+	dh $@
+
+WORKING_GOPATH=$(PWD)/.gopath
+ORG_DIR=$(WORKING_GOPATH)/src/github.com/aws
+BUILD_DIR=$(ORG_DIR)/amazon-ssm-agent
+DEB_TARGET_ARCH_OS ?= $(shell dpkg-architecture -qDEB_TARGET_ARCH_OS)
+DEB_TARGET_ARCH_CPU ?= $(shell dpkg-architecture -qDEB_TARGET_ARCH_CPU)
+
+ifeq ($(DEB_TARGET_ARCH_CPU),amd64)
+	BUILD_TARGET=build-linux
+else
+	BUILD_TARGET=build-linux-$(DEB_TARGET_ARCH_CPU)
+endif
+
+override_dh_auto_configure:
+	mkdir -p $(ORG_DIR)
+	ln -s $(PWD) $(BUILD_DIR)
+
+override_dh_auto_build:
+	GOPATH=$(WORKING_GOPATH) make -C $(BUILD_DIR) $(BUILD_TARGET)
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf $(WORKING_GOPATH)
+
+override_dh_install:
+	dh_installdirs
+	dh_install --sourcedir=bin/$(DEB_TARGET_ARCH_OS)_$(DEB_TARGET_ARCH_CPU)
+	cp packaging/ubuntu/amazon-ssm-agent.service debian/amazon-ssm-agent/lib/systemd/system
+	cp seelog_unix.xml debian/amazon-ssm-agent/etc/amazon/ssm/seelog.xml

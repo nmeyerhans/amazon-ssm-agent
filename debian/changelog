@@ -1,0 +1,5 @@
+amazon-ssm-agent (2.3.0.0-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Noah Meyerhans <nmeyerha@amazon.com>  Thu, 02 May 2019 14:36:35 -0700

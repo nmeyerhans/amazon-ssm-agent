@@ -1,0 +1,3 @@
+lib/systemd/system
+usr/bin
+etc/amazon/ssm

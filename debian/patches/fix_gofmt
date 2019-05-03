@@ -1,0 +1,43 @@
+Index: amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogs_publisher_test.go
+===================================================================
+--- amazon-ssm-agent.orig/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogs_publisher_test.go
++++ amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogs_publisher_test.go
+@@ -34,7 +34,7 @@ func TestCreateLogGroupError(t *testing.
+ 	serviceMock.On("CreateLogGroup", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(errors.New("Log Group Creation Service Error"))
+ 
+ 	cwPublisher := CloudWatchPublisher{
+-		log: logMock,
++		log:                   logMock,
+ 		cloudWatchLogsService: serviceMock,
+ 		instanceID:            "instanceID",
+ 	}
+@@ -51,7 +51,7 @@ func TestCreateLogStreamError(t *testing
+ 	serviceMock.On("CreateLogStream", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(errors.New("Log Stream Creation Service Error"))
+ 
+ 	cwPublisher := CloudWatchPublisher{
+-		log: logMock,
++		log:                   logMock,
+ 		cloudWatchLogsService: serviceMock,
+ 		instanceID:            "instanceID",
+ 	}
+Index: amazon-ssm-agent/agent/session/datachannel/datachannel.go
+===================================================================
+--- amazon-ssm-agent.orig/agent/session/datachannel/datachannel.go
++++ amazon-ssm-agent/agent/session/datachannel/datachannel.go
+@@ -244,11 +244,11 @@ func (dataChannel *DataChannel) Initiali
+ 	dataChannel.handshake = Handshake{
+ 		responseChan:            make(chan bool),
+ 		encryptionConfirmedChan: make(chan bool),
+-		error:              nil,
+-		complete:           false,
+-		skipped:            false,
+-		handshakeEndTime:   time.Now(),
+-		handshakeStartTime: time.Now(),
++		error:                   nil,
++		complete:                false,
++		skipped:                 false,
++		handshakeEndTime:        time.Now(),
++		handshakeStartTime:      time.Now(),
+ 	}
+ }
+ 
